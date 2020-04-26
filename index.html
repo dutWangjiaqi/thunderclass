@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户注册</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>
+    <script src="js/vue.js"></script>
+    <!-- 异步提交的库 -->
+    <script src="js/vue-resource.js"></script>
+    <style>
+
+        .container {
+            margin-top: 15%;
+            width: 35%;
+        }
+
+        .btn-primary {
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .form-control {
+            margin-bottom: 4px;
+        }
+
+
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!--<div id="demo" v-show="show" class="alert alert-success">
+        <span v-if="alert_tips">成功！很好地完成了提交。</span>
+    </div>-->
+    <form id="form">
+
+        <div class="form-signin">
+            <!--<h2 class="form-signin-heading">登录</h2>-->
+            <!-- class="sr-only"将label标签隐藏 -->
+            <label for="exampleInputUsername" class="sr-only">用户名</label>
+            <!-- 会忽略所有表单元素的value、checked、selected特性的初始值，而总是将Vue实例的数据作为数据来源 -->
+            <input type="text" class="form-control" v-model="formObj.username" id="exampleInputUsername" name="username"
+                   placeholder="用户名">
+            <label for="exampleInputUsername" class="sr-only">密码</label>
+            <input type="password" class="form-control" v-model="formObj.password" id="exampleInputPassword"
+                   name="password"
+                   placeholder="密码">
+           
+            <div class="checkbox">
+                <label>
+                    <!--<input type="checkbox">
+                    记住密码-->
+                </label>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" onclick="ajaxRegister()" type="button">登录
+            </button>
+        </div>
+    </form>
+</div>
+</body>
+<script>
+
+    function ajaxRegister() {
+        //Vue的异步Get请求
+        /*Vue.http.get("/test").then(function (res) {
+            console.log(res.bodyText);
+        }, function (res) {
+            console.log(res.status);
+        });*/
+    
+    //     Vue.http.options.credentials = true
+        var param = new FormData(document.getElementById("form"));
+    
+    //     for (var key of param.keys()){
+    //         console.log(key)
+    //         console.log(param.get(key))
+    //     }
+    //     Vue.http.get("http://47.94.201.157:9090/login/ping").then(function (res) {
+    //         console.log(res.bodyText);
+    //         console.log("登录成功");
+    //     }, function (res) {
+
+    //         alert("登录失败");
+    //     });
+        
+        $.ajax(
+            {
+                url:'/proxy.php',
+                type: 'GET',
+                success : function(data){
+                    console.log(data)
+                }
+            }
+            
+        )
+        return false;
+    }
+
+    
+</script>
+</html>
