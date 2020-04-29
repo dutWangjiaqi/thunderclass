@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生页面</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>
+    <script src="js/vue.js"></script>
+    <!-- 异步提交的库 -->
+    <script src="js/vue-resource.js"></script>
+    <script>
+        $(function(){
+            get_token();
+        });
+        function get_token(){
+            var token = localStorage.getItem("token");
+            var account = localStorage.getItem("account");
+            $("#token").text(token);
+            $("#account").text(account);
+            console.log("hello");
+            console.log(token);
+        }
+    </script>
+
+</head>
+<p>hello</p>
+<body>
+    <div id = "account"></div>
+    <div id = "token"></div>
+    <div id = "current_time"></div>
+</body>
+<script>
+    var timerID=window.setInterval(queryTime,1000);
+
+    var token = localStorage.getItem("token");
+    var s_account = localStorage.getItem("account");
+    var t_account = "jiangshuiping.sky";
+    var is_start = false;
+    var course_id = "734032068";
+    function queryTime(){
+        console.log("queryTime");
+        $.ajax(
+        {
+            url:'proxy/polling_time.php',
+            type: 'POST',
+            dataType: 'json',
+            data:{token:token,course_id:course_id,s_account:s_account,t_account:t_account,is_start:is_start},
+            success : function(obj,textstatus){
+                console.log(obj);
+                time = obj.data.time;
+                $("#current_time").text(time);
+                status = obj.data.status;
+                color = obj.data.color;
+                if (status=="Finish"){
+                    clearInterval(timerID);
+                    time_element = document.getElementById("current_time");
+                    time_element.style.color="#e80000";
+                }else if (status == "Ongoing"){
+                    time_element = document.getElementById("current_time");
+                    time_element.style.color="#00ff00";
+                }else if (status == "NotStart"){
+                    time_element = document.getElementById("current_time");
+                    time_element.style.color="#febf00";
+                }
+            },
+            error : function(xhr){
+                console.log(xhr.responseText);
+                // document.getElementById('login').innerHTML=xhr.responseText;
+            }                
+        }
+        )
+
+    }
+
+</script>
+
+</html>
