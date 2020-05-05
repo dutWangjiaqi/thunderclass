@@ -86,7 +86,7 @@
 
     //         alert("登录失败");
     //     });
-        var username = param.get('username');
+        var account = param.get('username');
         var password = param.get('password');
         var timestamp = Date.parse(new Date());
         var access_key = null;
@@ -96,27 +96,27 @@
                 url:'proxy/get_access_key.php',
                 type: 'POST',
                 dataType: 'json',
-                data:{account:username, _t:timestamp},
+                data:{account:account, _t:timestamp},
                 success : function(obj,textstatus){
                     console.log(obj);
                     code = obj.code;
                     if (code == 200){
                         access_key = obj.data.access_key;
                         var nonce = Math.ceil(Math.random()*100000000);
-                        var enc = hex_md5(username + password + access_key + nonce + timestamp);
+                        var enc = hex_md5(account + password + access_key + nonce + timestamp);
                         $.ajax(
                             {
                                 url:'proxy/get_token.php',
                                 type: 'POST',
                                 dataType: 'json',
-                                data:{account:username, _t:timestamp, access_key: access_key, nonce: nonce, enc:enc},
+                                data:{account:account, _t:timestamp, access_key: access_key, nonce: nonce, enc:enc},
                                 success : function(obj,textstatus){
                                     console.log(obj);
                                     code = obj.code;
                                     if (code == 200){
                                         token = obj.data;
                                         localStorage.setItem("token",token);
-                                        localStorage.setItem("account",username);
+                                        localStorage.setItem("account",account);
                                         window.location.href='index.html';
                                         // document.getElementById('login').innerHTML=obj;
                                     }else{
@@ -125,7 +125,6 @@
                                 },
                                 error : function(xhr){
                                     console.log(xhr.responseText);
-                                    document.getElementById('login').innerHTML=xhr.responseText;
                                 }
                                 
                             }
